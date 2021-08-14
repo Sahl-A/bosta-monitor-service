@@ -3,7 +3,8 @@ services:
   postgres:
     image: postgres
     container_name: pg_monitor-service
-    network_mode: host
+    ports: 
+      - 5544:5432
     environment:
       POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data/pgdata

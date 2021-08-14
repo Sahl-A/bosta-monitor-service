@@ -17,7 +17,7 @@ const config: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
   database: 'postgres',
-  synchronize: false,
+  synchronize: true,
   logging: false,
   entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/**/shared/migrations/*.js'],
