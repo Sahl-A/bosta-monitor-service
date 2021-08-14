@@ -4,9 +4,16 @@ import { ChecksController } from './checks.controller';
 import { CheckRepository } from './entities/check.repository';
 import { CheckConfigRepository } from './entities/check-config.repository';
 import { CheckLogRepository } from './entities/check-log.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [CheckRepository, CheckConfigRepository, CheckLogRepository],
+  imports: [
+    TypeOrmModule.forFeature([
+      CheckRepository,
+      CheckConfigRepository,
+      CheckLogRepository,
+    ]),
+  ],
   controllers: [ChecksController],
   providers: [ChecksService],
 })
