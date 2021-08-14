@@ -16,8 +16,8 @@ export class ChecksController {
   constructor(private readonly checksService: ChecksService) {}
 
   @Post()
-  create(@Body() createCheckDto: CreateCheckDto) {
-    return this.checksService.create(createCheckDto);
+  async create(@Body() createCheckDto: CreateCheckDto): Promise<string> {
+    return await this.checksService.create(createCheckDto);
   }
 
   @Get()

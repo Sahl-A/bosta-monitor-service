@@ -1,11 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
+import { CheckConfigRepository } from './entities/check-config.repository';
+import { CheckRepository } from './entities/check.repository';
 
 @Injectable()
 export class ChecksService {
-  create(createCheckDto: CreateCheckDto) {
-    return 'This action adds a new check';
+  constructor(
+    private checkRepository: CheckRepository,
+    private checkConfigRepository: CheckConfigRepository,
+  ) {}
+  async create(createCheckDto: CreateCheckDto) {
+    // create a check
+    const newCheck = await this.checkRepository.createCheck();
+
+    // Add check config
+    await this.checkConfigRepository.addConfig(createCheckDto, newCheck);
+    // TODO
+    // run a job with interval from createCheckDto
+
+    return newCheck.uuid;
   }
 
   findAll() {
