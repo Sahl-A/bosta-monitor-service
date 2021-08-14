@@ -1,9 +1,15 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 
 import Model from '../../shared/database/entity.model';
+import { Check } from './check.entity';
 
 @Entity({ name: 'checks_config' })
 export class CheckConfig extends Model {
+  // one-to-one relation with check entity
+  @OneToOne(() => Check, { cascade: true, onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'checks_id' })
+  check: Check;
+
   @Column({ nullable: true })
   name: string;
 
