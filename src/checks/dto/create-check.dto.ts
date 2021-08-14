@@ -1,14 +1,22 @@
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
   IsIn,
   IsNumber,
-  IsObject,
   IsOptional,
   IsPort,
   IsString,
   IsUrl,
+  ValidateNested,
 } from 'class-validator';
+
+class Authentication {
+  @IsString()
+  username: string;
+  @IsString()
+  password: string;
+}
 
 export class CreateCheckDto {
   @IsString()
@@ -44,9 +52,10 @@ export class CreateCheckDto {
   threshold?: number;
 
   @IsOptional()
-  @IsObject()
-  @IsString({ each: true })
-  authentication?: { username: string; password: string };
+  // @IsObject()
+  @ValidateNested()
+  @Type(() => Authentication)
+  authentication?: Authentication;
 
   @IsOptional()
   @IsArray()
