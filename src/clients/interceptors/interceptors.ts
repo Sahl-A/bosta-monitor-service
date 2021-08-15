@@ -26,7 +26,6 @@ export default {
         return config;
       },
       (error) => {
-        console.log('error ====== inside axios request interceptor', error);
         return Promise.reject(error);
       },
     );
@@ -55,7 +54,6 @@ export default {
         return res;
       },
       (error) => {
-        console.log('error ====== inside axios response interceptor', error);
         return Promise.reject(error);
       },
     );

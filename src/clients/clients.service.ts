@@ -5,9 +5,6 @@ import { IpollingRequestConfig } from '../shared/interfaces/pollingRequestConfig
 
 @Injectable()
 export class ClientsService {
-  // create axios instance
-  private readonly httpClient = this.axios.create();
-
   constructor(
     @Inject('axios') private readonly axios: AxiosStatic,
     @Inject('interceptors') private readonly interceptors: any,
@@ -15,11 +12,12 @@ export class ClientsService {
 
   httpClientAPI = {
     get: async (url: string, configData: IpollingRequestConfig) => {
-      let httpRes: IextendedAxiosResponse;
-      this.interceptors.addHeader(this.httpClient, configData);
-      this.interceptors.changeResData(this.httpClient, configData);
+      const httpClient = this.axios.create();
+      let httpRes = {} as IextendedAxiosResponse;
+      this.interceptors.addHeader(httpClient, configData);
+      this.interceptors.changeResData(httpClient, configData);
       try {
-        httpRes = await this.httpClient.get(url);
+        httpRes = await httpClient.get(url);
       } catch (err) {
         httpRes.data = { isSucceeded: false };
       }
