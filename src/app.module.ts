@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app';
 import dbConfig from './config/database';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 
 const evnVariable = process.env.NODE_ENV;
 @Module({
@@ -15,6 +16,7 @@ const evnVariable = process.env.NODE_ENV;
       isGlobal: true,
       load: [appConfig],
     }),
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot(dbConfig),
   ],
 })

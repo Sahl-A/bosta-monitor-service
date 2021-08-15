@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ChecksScheduler } from './checksScheduler.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
 import { CheckConfigRepository } from './entities/check-config.repository';
@@ -9,6 +10,7 @@ export class ChecksService {
   constructor(
     private checkRepository: CheckRepository,
     private checkConfigRepository: CheckConfigRepository,
+    private checkScheduler: ChecksScheduler,
   ) {}
   async create(createCheckDto: CreateCheckDto) {
     // create a check
@@ -16,8 +18,9 @@ export class ChecksService {
 
     // Add check config
     await this.checkConfigRepository.addConfig(createCheckDto, newCheck);
-    // TODO
+
     // run a job with interval from createCheckDto
+    this.checkScheduler.scheduleChecks(createCheckDto);
 
     return newCheck.uuid;
   }

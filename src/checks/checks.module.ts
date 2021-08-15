@@ -5,6 +5,7 @@ import { CheckRepository } from './entities/check.repository';
 import { CheckConfigRepository } from './entities/check-config.repository';
 import { CheckLogRepository } from './entities/check-log.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChecksScheduler } from './checksScheduler.service';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ]),
   ],
   controllers: [ChecksController],
-  providers: [ChecksService],
+  providers: [ChecksService, ChecksScheduler],
 })
 export class ChecksModule {}
