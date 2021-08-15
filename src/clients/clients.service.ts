@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AxiosStatic } from 'axios';
+import { IextendedAxiosResponse } from 'src/shared/interfaces/extendedAxiosResponse.interface';
 import { IpollingRequestConfig } from '../shared/interfaces/pollingRequestConfig';
 
 @Injectable()
@@ -14,7 +15,7 @@ export class ClientsService {
 
   httpClientAPI = {
     get: async (url: string, configData: IpollingRequestConfig) => {
-      let httpRes: Record<string, unknown>;
+      let httpRes: IextendedAxiosResponse;
       this.interceptors.addHeader(this.httpClient, configData);
       this.interceptors.changeResData(this.httpClient, configData);
       try {
