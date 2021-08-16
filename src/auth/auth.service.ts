@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { User } from '../users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
     // If user is not found
@@ -17,5 +21,12 @@ export class AuthService {
     }
     // else return the below
     return user;
+  }
+
+  async login(user: User) {
+    const payload = { email: user.email, sub: user.uuid };
+    return {
+      token: this.jwtService.sign(payload),
+    };
   }
 }
