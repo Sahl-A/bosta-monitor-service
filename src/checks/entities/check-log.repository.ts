@@ -16,7 +16,11 @@ export class CheckLogRepository extends Repository<CheckLog> {
   }
 
   async getLastLogStatus(): Promise<string> {
-    const lastLog = await this.findOne({ order: { created_at: 'DESC' } });
-    return lastLog.status;
+    const lastLog = await this.find({
+      order: { created_at: 'DESC' },
+      take: 2,
+    });
+    // if this is first log, return it
+    return lastLog.length === 1 ? lastLog[0].status : lastLog[1].status;
   }
 }

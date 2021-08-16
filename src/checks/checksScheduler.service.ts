@@ -24,14 +24,14 @@ export class ChecksScheduler {
         authentication: checkConfig.authentication,
       });
 
-      // get last log status (up or down)
-      const lastLogStatus = await this.checksLogRepository.getLastLogStatus();
-
       // Add log to db
       await this.checksLogRepository.addLog(check, {
         responseTime: res.responseTime,
         status: res.data.isSucceeded ? 'up' : 'down',
       });
+
+      // get last log status (up or down)
+      const lastLogStatus = await this.checksLogRepository.getLastLogStatus();
 
       // if server status changed since last log
       if (
