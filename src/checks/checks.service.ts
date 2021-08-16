@@ -21,7 +21,7 @@ export class ChecksService {
     await this.checkConfigRepository.addConfig(createCheckDto, newCheck);
 
     // run a job with interval from createCheckDto
-    this.checkScheduler.scheduleChecks(newCheck, createCheckDto);
+    this.checkScheduler.scheduleChecks(user, newCheck, createCheckDto);
 
     return newCheck.uuid;
   }
