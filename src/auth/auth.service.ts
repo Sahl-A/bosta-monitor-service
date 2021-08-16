@@ -35,7 +35,12 @@ export class AuthService {
     // Create user & save it to db
     const user = await this.userService.create(signupDto);
 
-    return user;
+    // create payload
+    const payload: IjwtPayload = { email: user.email, uuid: user.uuid };
+
+    return {
+      token: this.jwtService.sign(payload),
+    };
   }
 
   async login(user: User) {
