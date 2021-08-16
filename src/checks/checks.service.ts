@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { User } from 'src/users/entities/user.entity';
 import { ChecksScheduler } from './checksScheduler.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
@@ -12,9 +13,9 @@ export class ChecksService {
     private checkConfigRepository: CheckConfigRepository,
     private checkScheduler: ChecksScheduler,
   ) {}
-  async create(createCheckDto: CreateCheckDto) {
+  async create(user: User, createCheckDto: CreateCheckDto): Promise<string> {
     // create a check
-    const newCheck = await this.checkRepository.createCheck();
+    const newCheck = await this.checkRepository.createCheck(user);
 
     // Add check config
     await this.checkConfigRepository.addConfig(createCheckDto, newCheck);
