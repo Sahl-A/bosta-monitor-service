@@ -37,8 +37,13 @@ export class ChecksService {
     return checks;
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} check`;
+  async findOne(checkUuid: string, user: User): Promise<Check> {
+    return await this.checkRepository
+      .createQueryBuilder('checks')
+      .where('checks.user.id = :id', { id: user.id })
+      .where('checks.uuid = :id', { id: checkUuid })
+      .innerJoinAndSelect('checks.logs', 'log')
+      .getOne();
   }
 
   update(id: number, updateCheckDto: UpdateCheckDto) {

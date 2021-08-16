@@ -30,13 +30,16 @@ export class ChecksController {
   }
 
   @Get()
-  findAll(@Request() req: IextendedRequest): Promise<Check[]> {
-    return this.checksService.findAll(req.user);
+  async findAll(@Request() req: IextendedRequest): Promise<Check[]> {
+    return await this.checksService.findAll(req.user);
   }
 
-  @Get(':postid')
-  findOne(@Param('postid') postid: string) {
-    return this.checksService.findOne(postid);
+  @Get(':checkId')
+  async findOne(
+    @Param('checkId') checkId: string,
+    @Request() req: IextendedRequest,
+  ): Promise<Check> {
+    return await this.checksService.findOne(checkId, req.user);
   }
 
   @Patch(':id')
