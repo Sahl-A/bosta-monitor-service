@@ -42,8 +42,7 @@ export class ChecksScheduler {
       }
     });
 
-    const cronJobName = `${checkConfig.name}-${uuid()}`;
-    this.schedulerRegistry.addCronJob(cronJobName, job);
+    this.schedulerRegistry.addCronJob(check.uuid, job);
 
     job.start();
   }
