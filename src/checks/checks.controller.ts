@@ -13,7 +13,8 @@ import { ChecksService } from './checks.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { IextendedRequest } from 'src/shared/interfaces/extendedRequest.inteface';
+import { IextendedRequest } from '../shared/interfaces/extendedRequest.inteface';
+import { Check } from './entities/check.entity';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('checks')
@@ -29,13 +30,13 @@ export class ChecksController {
   }
 
   @Get()
-  findAll() {
-    return this.checksService.findAll();
+  findAll(@Request() req: IextendedRequest): Promise<Check[]> {
+    return this.checksService.findAll(req.user);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.checksService.findOne(+id);
+  @Get(':postid')
+  findOne(@Param('postid') postid: string) {
+    return this.checksService.findOne(postid);
   }
 
   @Patch(':id')

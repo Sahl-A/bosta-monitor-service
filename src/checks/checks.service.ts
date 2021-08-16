@@ -4,6 +4,7 @@ import { ChecksScheduler } from './checksScheduler.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
 import { CheckConfigRepository } from './entities/check-config.repository';
+import { Check } from './entities/check.entity';
 import { CheckRepository } from './entities/check.repository';
 
 @Injectable()
@@ -26,11 +27,17 @@ export class ChecksService {
     return newCheck.uuid;
   }
 
-  findAll() {
-    return `This action returns all checks`;
+  async findAll(user: User): Promise<Check[]> {
+    const checks = await this.checkRepository
+      .createQueryBuilder('checks')
+      .where('checks.user.id = :id', { id: user.id })
+      .innerJoinAndSelect('checks.logs', 'log')
+      .getMany();
+
+    return checks;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} check`;
   }
 
