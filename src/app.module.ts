@@ -5,6 +5,7 @@ import appConfig from './config/app';
 import dbConfig from './config/database';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AuthModule } from './auth/auth.module';
 
 const evnVariable = process.env.NODE_ENV;
 @Module({
@@ -18,6 +19,7 @@ const evnVariable = process.env.NODE_ENV;
     }),
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot(dbConfig),
+    AuthModule,
   ],
 })
 export class AppModule {}
