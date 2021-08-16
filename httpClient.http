@@ -1,0 +1,15 @@
+###
+POST http://localhost:3009/checks
+Content-Type: application/json
+
+{
+  "name": "pickify",
+  "url": "http://www.localhost:8888/",
+  "protocol": "http",
+  "path": "test-path",
+  "port": "8080",
+  "webhook": "https://discord.com/api/webhooks/876078314140344371/jPRLhfQav-slDrWEiK4wOENR2-PCRm0JVmj4ZX4ehXz7QidtAQxWwdiwD6JKRnt3pRlr",
+  "interval": 10,
+  "authentication": {"username":"sahl","password": "123456"},
+  "tags": ["pickify", "polls"]
+}
