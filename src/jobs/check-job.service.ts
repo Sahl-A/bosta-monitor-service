@@ -4,12 +4,14 @@ import { ClientsService } from '../clients/clients.service';
 import { User } from '../users/entities/user.entity';
 import { CreateCheckDto } from '../checks/dto/create-check.dto';
 import { Check } from '../checks/entities/check.entity';
+import { EmailProviderService } from '../alert-providers/email-provider.service';
 
 @Injectable()
 export class CheckJobService {
   constructor(
     private readonly clientService: ClientsService,
     private readonly checksLogRepository: CheckLogRepository,
+    private readonly emailProvider: EmailProviderService,
   ) {}
   public async checkActions(
     user: User,
@@ -38,7 +40,14 @@ export class CheckJobService {
       (!res.data.isSucceeded && lastLogStatus === 'up')
     ) {
       console.log(`Server went ${res.data.isSucceeded ? 'up' : 'down'}`);
-      // call differentt providers
+      // call different providers
+      ////////////////////
+      // send email
+      await this.emailProvider.sendEmail(
+        user.email,
+        res.data.isSucceeded,
+        checkConfig.url,
+      );
     }
   }
 }

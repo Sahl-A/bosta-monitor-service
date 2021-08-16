@@ -3,4 +3,7 @@ export default () => ({
 
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiry: process.env.JWT_EXPIRY,
+
+  sendGridKey: process.env.SENDGRID_KEY,
+  sendGridEmail: process.env.SENDGRID_EMAIL,
 });
