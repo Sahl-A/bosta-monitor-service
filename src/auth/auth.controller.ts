@@ -3,9 +3,9 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { IextendedRequest } from '../shared/interfaces/extendedRequest.inteface';
 import { SignupDto } from './dto/signup.dto';
-import { Itoken } from 'src/shared/interfaces/token.interface';
+import { Itoken } from '../shared/interfaces/token.interface';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

@@ -6,8 +6,8 @@ import { CheckConfigRepository } from './entities/check-config.repository';
 import { CheckLogRepository } from './entities/check-log.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChecksScheduler } from './checksScheduler.service';
-import { ClientsModule } from 'src/clients/clients.module';
-import { JobsModule } from 'src/jobs/jobs.module';
+import { ClientsModule } from '../clients/clients.module';
+import { JobsModule } from '../jobs/jobs.module';
 
 @Module({
   imports: [

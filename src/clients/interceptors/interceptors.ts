@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
-import { IextendedAxiosRequestConfig } from 'src/shared/interfaces/extendedAxiosRequestConfig.interface';
-import { IextendedAxiosResponse } from 'src/shared/interfaces/extendedAxiosResponse.interface';
+import { IextendedAxiosRequestConfig } from '../../shared/interfaces/extendedAxiosRequestConfig.interface';
+import { IextendedAxiosResponse } from '../../shared/interfaces/extendedAxiosResponse.interface';
 import { IpollingRequestConfig } from '../../shared/interfaces/pollingRequestConfig';
 
 export default {

@@ -3,8 +3,8 @@ import {
   OnModuleInit,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Ireport } from 'src/shared/interfaces/report.interface';
-import { User } from 'src/users/entities/user.entity';
+import { Ireport } from '../shared/interfaces/report.interface';
+import { User } from '../users/entities/user.entity';
 import { ChecksScheduler } from './checksScheduler.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { CheckConfigRepository } from './entities/check-config.repository';

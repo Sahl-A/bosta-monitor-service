@@ -14,7 +14,7 @@ import { CreateCheckDto } from './dto/create-check.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { IextendedRequest } from '../shared/interfaces/extendedRequest.inteface';
 import { Check } from './entities/check.entity';
-import { Ireport } from 'src/shared/interfaces/report.interface';
+import { Ireport } from '../shared/interfaces/report.interface';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('checks')

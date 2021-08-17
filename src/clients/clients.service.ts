@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AxiosStatic } from 'axios';
-import { IextendedAxiosResponse } from 'src/shared/interfaces/extendedAxiosResponse.interface';
+import { IextendedAxiosResponse } from '../shared/interfaces/extendedAxiosResponse.interface';
 import { IpollingRequestConfig } from '../shared/interfaces/pollingRequestConfig';
 
 @Injectable()
