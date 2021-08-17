@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Request,
+  HttpCode,
 } from '@nestjs/common';
 import { ChecksService } from './checks.service';
 import { CreateCheckDto } from './dto/create-check.dto';
@@ -47,8 +48,12 @@ export class ChecksController {
     return this.checksService.update(+id, updateCheckDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.checksService.remove(+id);
+  @HttpCode(204)
+  @Delete(':checkId')
+  remove(
+    @Param('checkId') checkId: string,
+    @Request() req: IextendedRequest,
+  ): Promise<void> {
+    return this.checksService.remove(checkId, req.user);
   }
 }

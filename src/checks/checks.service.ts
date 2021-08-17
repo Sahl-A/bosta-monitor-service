@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from 'src/users/entities/user.entity';
 import { ChecksScheduler } from './checksScheduler.service';
 import { CreateCheckDto } from './dto/create-check.dto';
@@ -50,7 +50,21 @@ export class ChecksService {
     return `This action updates a #${id} check`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} check`;
+  async remove(checkUuid: string, user: User): Promise<void> {
+    // get all checks of this user
+    const checks = await this.checkRepository
+      .createQueryBuilder('checks')
+      .where('checks.user.id = :id', { id: user.id })
+      .getMany();
+
+    // throw error if check is not created by user
+    if (!checks.some((check) => check.uuid === checkUuid)) {
+      throw new UnauthorizedException('Unauthorized');
+    }
+
+    // delete the check
+    await this.checkRepository.delete({
+      uuid: checkUuid,
+    });
   }
 }
