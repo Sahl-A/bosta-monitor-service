@@ -10,22 +10,32 @@ export class CheckRepository extends Repository<Check> {
     return await this.save(newCheck);
   }
 
-  public async findUserSingleCheck(userUuid: string, checkUuid: string) {
-    return await this.createQueryBuilder('checks')
+  public async findUserSingleCheck(
+    userUuid: string,
+    checkUuid: string,
+  ): Promise<Check> {
+    const check = await this.createQueryBuilder('checks')
       .where('checks.user.uuid = :uuid', { uuid: userUuid })
       .where('checks.uuid = :uuid', { uuid: checkUuid })
       .innerJoinAndSelect('checks.logs', 'log')
       .innerJoinAndSelect('checks.config', 'config')
       .getOne();
+    return check;
   }
 
   public async findUserChecks(userUuid: string): Promise<Check[]> {
-    return await this.createQueryBuilder('checks')
+    const checks = await this.createQueryBuilder('checks')
       .where('user.uuid = :uuid', { uuid: userUuid })
       .innerJoinAndSelect('checks.logs', 'log')
       .innerJoinAndSelect('checks.user', 'user')
       .innerJoinAndSelect('checks.config', 'config')
       .getMany();
+
+    checks.forEach((check) => {
+      delete check.user.password;
+    });
+
+    return checks;
   }
 
   public async findAllChecks(): Promise<Check[]> {
