@@ -6,7 +6,6 @@ WORKDIR /monitor-service
 
 COPY package.json package.json
 COPY dist dist/
-COPY logs logs/
 
 RUN yarn
 
