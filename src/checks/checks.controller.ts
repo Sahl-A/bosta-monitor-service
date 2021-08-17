@@ -55,10 +55,10 @@ export class ChecksController {
 
   @HttpCode(204)
   @Delete(':checkId')
-  remove(
+  async remove(
     @Param('checkId') checkId: string,
     @Request() req: IextendedRequest,
   ): Promise<void> {
-    return this.checksService.remove(checkId, req.user);
+    await this.checksService.remove(checkId, req.user);
   }
 }
