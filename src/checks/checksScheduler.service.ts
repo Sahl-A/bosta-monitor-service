@@ -22,4 +22,8 @@ export class ChecksScheduler {
 
     job.start();
   }
+
+  killJob(jobName: string) {
+    this.schedulerRegistry.deleteCronJob(jobName);
+  }
 }

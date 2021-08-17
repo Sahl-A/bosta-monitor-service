@@ -72,6 +72,9 @@ export class ChecksService implements OnModuleInit {
     await this.checkRepository.delete({
       uuid: checkUuid,
     });
+
+    // kill the job of this check
+    this.checkScheduler.killJob(checkUuid);
   }
 
   async getCheckReport(user: User, checkUuid: string): Promise<Ireport> {

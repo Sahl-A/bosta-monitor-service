@@ -20,9 +20,6 @@ export class Check extends Model {
   user: User;
 
   // one-to-one with config
-  @OneToOne(() => CheckConfig, (checkConfig) => checkConfig.check, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
+  @OneToOne(() => CheckConfig, (checkConfig) => checkConfig.check)
   config: CheckConfig;
 }
