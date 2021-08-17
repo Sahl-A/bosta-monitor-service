@@ -1,0 +1,560 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Monitor Service API Specs",
+    "version": "1.0.0",
+    "title": "Bosta Monitor Service"
+  },
+  "tags": [
+    {
+      "name": "checks",
+      "description": "checks endpoints"
+    }
+  ],
+  "paths": {
+    "/checks": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["checks"],
+        "summary": "Create a new check",
+        "operationId": "createCheck",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/check_creation_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Check Created Successfully",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "$ref": "#/components/responses/error_bad_request"
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "$ref": "#/components/responses/error_unauthorized"
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["checks"],
+        "summary": "Get checks",
+        "operationId": "getChecks",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "number"
+            },
+            "description": "The number of items to skip before starting to collect the result set"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number"
+            },
+            "description": "The number of items to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all checks",
+            "$ref": "#/components/responses/checks_response"
+          },
+          "400": {
+            "description": "Bad request",
+            "$ref": "#/components/responses/error_bad_request"
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "$ref": "#/components/responses/error_unauthorized"
+          }
+        }
+      }
+    },
+    "/checks/{checkid}/reports": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["checks"],
+        "summary": "get a report for a given check",
+        "operationId": "getAcheckReport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "checkid",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "id of check"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Check report is generated",
+            "$ref": "#/components/responses/generated_report"
+          },
+          "400": {
+            "description": "Bad request",
+            "$ref": "#/components/responses/error_bad_request"
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "$ref": "#/components/responses/error_unauthorized"
+          }
+        }
+      }
+    },
+    "/checks/{checkid}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["checks"],
+        "summary": "Get single check",
+        "operationId": "getOneCheck",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "checkid",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "id of check needed"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get check with the provided id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/single_check_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "$ref": "#/components/responses/error_bad_request"
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "$ref": "#/components/responses/error_unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["checks"],
+        "summary": "Delete one check",
+        "operationId": "deleteOneCheck",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "checkid",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "id of check needed"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Delete one check",
+            "$ref": "#/components/responses/single_check_deletion_response"
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "$ref": "#/components/responses/error_unauthorized"
+          },
+          "404": {
+            "description": "Not Found",
+            "$ref": "#/components/responses/error_not_found"
+          }
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "tags": ["signup"],
+        "summary": "Signup",
+        "operationId": "signup",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/signup"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Signed-up successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "$ref": "#/components/responses/error_bad_request"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["login"],
+        "summary": "login",
+        "operationId": "login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "logged-in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "$ref": "#/components/responses/error_bad_request"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "check_creation_request": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "protocol": {
+            "type": "string",
+            "enum": ["http", "https", "tcp"]
+          },
+          "path": {
+            "type": "string"
+          },
+          "webhook": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "number"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "authentication": {
+            "type": "object",
+            "properties": {
+              "username": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              }
+            }
+          },
+          "ignore_ssl": {
+            "type": "boolean"
+          },
+          "port": {
+            "type": "number"
+          },
+          "timeout": {
+            "type": "number"
+          },
+          "threshold": {
+            "type": "number"
+          }
+        },
+        "required": ["protocol", "url", "name"]
+      },
+      "single_check_response": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2021-01-30T08:30:00Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2021-01-30T08:30:00Z"
+          },
+          "config": {
+            "$ref": "#/components/schemas/check_creation_request"
+          },
+          "logs": {
+            "$ref": "#/components/schemas/check_logs"
+          }
+        }
+      },
+      "check_logs": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "response_time": {
+            "type": "number"
+          },
+          "uuid": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2021-01-30T08:30:00Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2021-01-30T08:30:00Z"
+          }
+        }
+      },
+      "token": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "signup": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "passwordConfirm": {
+            "type": "string"
+          }
+        }
+      },
+      "login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "generic_error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["error1", "error2"]
+          },
+          "status_code": {
+            "type": "number",
+            "default": 123
+          }
+        }
+      }
+    },
+    "responses": {
+      "generated_report": {
+        "description": "Check report is generated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "availability": {
+                  "type": "number"
+                },
+                "outages": {
+                  "type": "number"
+                },
+                "downtime": {
+                  "type": "number"
+                },
+                "uptime": {
+                  "type": "number"
+                },
+                "averageResponseTime": {
+                  "type": "number"
+                },
+                "history": {
+                  "$ref": "#/components/schemas/check_logs"
+                }
+              },
+              "required": ["groups"]
+            }
+          }
+        }
+      },
+      "checks_response": {
+        "description": "Get checks",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "checksCount": {
+                  "type": "number"
+                },
+                "checks": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/single_check_response"
+                  }
+                }
+              },
+              "required": ["checksCount", "checks"]
+            }
+          }
+        }
+      },
+      "single_check_deletion_response": {
+        "description": "Check deleted"
+      },
+      "error_bad_request": {
+        "description": "Bad Request Error occured",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/generic_error"
+            }
+          }
+        }
+      },
+      "error_unauthorized": {
+        "description": "Unauthorized.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/generic_error"
+            }
+          }
+        }
+      },
+      "error_conflict": {
+        "description": "Conflict when user votes twice on same option.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/generic_error"
+            }
+          }
+        }
+      },
+      "error_internal_server_error": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/generic_error"
+            }
+          }
+        }
+      },
+      "error_not_found": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/generic_error"
+            }
+          }
+        }
+      }
+    }
+  }
+}
