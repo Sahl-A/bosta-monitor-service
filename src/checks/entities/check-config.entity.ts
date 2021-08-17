@@ -6,7 +6,7 @@ import { Check } from './check.entity';
 @Entity({ name: 'checks_config' })
 export class CheckConfig extends Model {
   // one-to-one relation with check entity
-  @OneToOne(() => Check, { cascade: true, onDelete: 'CASCADE' })
+  @OneToOne(() => Check, (check) => check.config)
   @JoinColumn({ name: 'checks_id' })
   check: Check;
 
