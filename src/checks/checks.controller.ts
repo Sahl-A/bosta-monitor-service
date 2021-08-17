@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseGuards,
@@ -12,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { ChecksService } from './checks.service';
 import { CreateCheckDto } from './dto/create-check.dto';
-import { UpdateCheckDto } from './dto/update-check.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { IextendedRequest } from '../shared/interfaces/extendedRequest.inteface';
 import { Check } from './entities/check.entity';
@@ -53,11 +51,6 @@ export class ChecksController {
     @Request() req: IextendedRequest,
   ): Promise<Check> {
     return await this.checksService.findOne(checkId, req.user);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCheckDto: UpdateCheckDto) {
-    return this.checksService.update(+id, updateCheckDto);
   }
 
   @HttpCode(204)

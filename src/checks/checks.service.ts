@@ -7,7 +7,6 @@ import { Ireport } from 'src/shared/interfaces/report.interface';
 import { User } from 'src/users/entities/user.entity';
 import { ChecksScheduler } from './checksScheduler.service';
 import { CreateCheckDto } from './dto/create-check.dto';
-import { UpdateCheckDto } from './dto/update-check.dto';
 import { CheckConfigRepository } from './entities/check-config.repository';
 import { CheckLogRepository } from './entities/check-log.repository';
 import { Check } from './entities/check.entity';
@@ -55,10 +54,6 @@ export class ChecksService implements OnModuleInit {
 
   async findOne(checkUuid: string, user: User): Promise<Check> {
     return await this.checkRepository.findUserSingleCheck(user.uuid, checkUuid);
-  }
-
-  update(id: number, updateCheckDto: UpdateCheckDto) {
-    return `This action updates a #${id} check`;
   }
 
   async remove(checkUuid: string, user: User): Promise<void> {
