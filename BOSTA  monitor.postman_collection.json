@@ -1,0 +1,242 @@
+{
+	"info": {
+		"_postman_id": "aefd7f9e-9f3f-434d-bae7-ed1da928b94a",
+		"name": "BOSTA monitor",
+		"description": "BOSTA monitoring service task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"test1\",\n    \"email\": \"test1@test.com\",\n    \"password\":\"12345\",\n    \"passwordConfirm\":\"12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3009/signup",
+							"host": [
+								"localhost"
+							],
+							"port": "3009",
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"test1@test.com\",\n    \"password\":\"12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3009/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3009",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Checks",
+			"item": [
+				{
+					"name": "Add check",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"pickify\",\n  \"url\": \"http://www.localhost:8888/\",\n  \"protocol\": \"http\",\n  \"path\": \"test-path\",\n  \"port\": \"8080\",\n  \"webhook\": \"https://discord.com/api/webhooks/876078314140344371/jPRLhfQav-slDrWEiK4wOENR2-PCRm0JVmj4ZX4ehXz7QidtAQxWwdiwD6JKRnt3pRlr\",\n  \"interval\": 10,\n  \"authentication\": {\"username\":\"sahl\",\"password\": \"123456\"},\n  \"tags\": [\"pickify\", \"polls\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3009/checks",
+							"host": [
+								"localhost"
+							],
+							"port": "3009",
+							"path": [
+								"checks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all checks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3009/checks",
+							"host": [
+								"localhost"
+							],
+							"port": "3009",
+							"path": [
+								"checks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One check",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3009/checks/f8be7d44-8edc-4b88-83c6-8cceb8bcac75",
+							"host": [
+								"localhost"
+							],
+							"port": "3009",
+							"path": [
+								"checks",
+								"f8be7d44-8edc-4b88-83c6-8cceb8bcac75"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete one check",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3009/checks/71f7cb1c-ec3b-41bb-94eb-4c7028974979",
+							"host": [
+								"localhost"
+							],
+							"port": "3009",
+							"path": [
+								"checks",
+								"71f7cb1c-ec3b-41bb-94eb-4c7028974979"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single  check report",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3009/checks/f8be7d44-8edc-4b88-83c6-8cceb8bcac75/reports",
+							"host": [
+								"localhost"
+							],
+							"port": "3009",
+							"path": [
+								"checks",
+								"f8be7d44-8edc-4b88-83c6-8cceb8bcac75",
+								"reports"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	}
+}
