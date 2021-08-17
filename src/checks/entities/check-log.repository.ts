@@ -15,9 +15,11 @@ export class CheckLogRepository extends Repository<CheckLog> {
     await this.save(newLog);
   }
 
-  async getLastLogStatus(): Promise<string> {
+  async getLastLogStatus(checkUuid: string): Promise<string> {
     const lastLog = await this.find({
       order: { created_at: 'DESC' },
+      relations: ['check'],
+      where: { check: { uuid: checkUuid } },
       take: 2,
     });
     // if this is first log, return it

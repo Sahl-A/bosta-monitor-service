@@ -18,7 +18,9 @@ export class CheckJobService {
     check: Check,
     checkConfig: CreateCheckDto,
   ) {
-    console.log(`cron job that runs every ${checkConfig.interval} secs`);
+    console.log(
+      `cron job ${check.uuid} that runs every ${checkConfig.interval} secs`,
+    );
     const res = await this.clientService.httpClientAPI.get(checkConfig.url, {
       timeout: checkConfig.timeout,
       ignoreSsl: checkConfig.ignore_ssl,
@@ -32,13 +34,16 @@ export class CheckJobService {
     });
 
     // get last log status (up or down)
-    const lastLogStatus = await this.checksLogRepository.getLastLogStatus();
+    const lastLogStatus = await this.checksLogRepository.getLastLogStatus(
+      check.uuid,
+    );
 
     // if server status changed since last log
-    if (
+    const isServerStatusChanged =
       (res.data.isSucceeded && lastLogStatus === 'down') ||
-      (!res.data.isSucceeded && lastLogStatus === 'up')
-    ) {
+      (!res.data.isSucceeded && lastLogStatus === 'up');
+
+    if (isServerStatusChanged) {
       console.log(`Server went ${res.data.isSucceeded ? 'up' : 'down'}`);
       // call different providers
       ////////////////////
