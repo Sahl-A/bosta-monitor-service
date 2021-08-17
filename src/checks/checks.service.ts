@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  OnModuleInit,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Ireport } from 'src/shared/interfaces/report.interface';
 import { User } from 'src/users/entities/user.entity';
 import { ChecksScheduler } from './checksScheduler.service';
@@ -10,13 +14,24 @@ import { Check } from './entities/check.entity';
 import { CheckRepository } from './entities/check.repository';
 
 @Injectable()
-export class ChecksService {
+export class ChecksService implements OnModuleInit {
   constructor(
     private checkRepository: CheckRepository,
     private checkLogRepository: CheckLogRepository,
     private checkConfigRepository: CheckConfigRepository,
     private checkScheduler: ChecksScheduler,
   ) {}
+
+  // start jobs for all checks found in DB
+  async onModuleInit() {
+    // get all checks
+    const checks = await this.checkRepository.findAllChecks();
+    checks.forEach((check) => {
+      // run job for each check
+      this.checkScheduler.scheduleChecks(check.user, check, check.config);
+    });
+  }
+
   async create(user: User, createCheckDto: CreateCheckDto): Promise<string> {
     // create a check
     const newCheck = await this.checkRepository.createCheck(user);
@@ -31,11 +46,11 @@ export class ChecksService {
   }
 
   async findAll(user: User): Promise<Check[]> {
-    return await this.checkRepository.findAllChecks(user.uuid);
+    return await this.checkRepository.findUserChecks(user.uuid);
   }
 
   async findOne(checkUuid: string, user: User): Promise<Check> {
-    return await this.checkRepository.findFullSingleCheck(user.uuid, checkUuid);
+    return await this.checkRepository.findUserSingleCheck(user.uuid, checkUuid);
   }
 
   update(id: number, updateCheckDto: UpdateCheckDto) {
@@ -61,7 +76,7 @@ export class ChecksService {
   }
 
   async getCheckReport(user: User, checkUuid: string): Promise<Ireport> {
-    const check = await this.checkRepository.findFullSingleCheck(
+    const check = await this.checkRepository.findUserSingleCheck(
       user.uuid,
       checkUuid,
     );
