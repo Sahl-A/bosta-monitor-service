@@ -23,4 +23,14 @@ export class CheckLogRepository extends Repository<CheckLog> {
     // if this is first log, return it
     return lastLog.length === 1 ? lastLog[0].status : lastLog[1].status;
   }
+
+  async getAvgResTime(checkUuid: string): Promise<number> {
+    const { avgResponseTime } = (await this.createQueryBuilder('logs')
+      .select('AVG(logs.response_time)', 'avgResponseTime')
+      .innerJoin('logs.check', 'check')
+      .where('check.uuid = :uuid', { uuid: checkUuid })
+      .getRawOne()) as { avgResponseTime: string };
+
+    return parseInt(parseInt(avgResponseTime).toFixed(2));
+  }
 }

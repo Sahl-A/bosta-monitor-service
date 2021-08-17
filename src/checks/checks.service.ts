@@ -1,9 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Ireport } from 'src/shared/interfaces/report.interface';
 import { User } from 'src/users/entities/user.entity';
 import { ChecksScheduler } from './checksScheduler.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
 import { CheckConfigRepository } from './entities/check-config.repository';
+import { CheckLogRepository } from './entities/check-log.repository';
 import { Check } from './entities/check.entity';
 import { CheckRepository } from './entities/check.repository';
 
@@ -11,6 +13,7 @@ import { CheckRepository } from './entities/check.repository';
 export class ChecksService {
   constructor(
     private checkRepository: CheckRepository,
+    private checkLogRepository: CheckLogRepository,
     private checkConfigRepository: CheckConfigRepository,
     private checkScheduler: ChecksScheduler,
   ) {}
@@ -28,22 +31,11 @@ export class ChecksService {
   }
 
   async findAll(user: User): Promise<Check[]> {
-    const checks = await this.checkRepository
-      .createQueryBuilder('checks')
-      .where('checks.user.id = :id', { id: user.id })
-      .innerJoinAndSelect('checks.logs', 'log')
-      .getMany();
-
-    return checks;
+    return await this.checkRepository.findAllChecks(user.uuid);
   }
 
   async findOne(checkUuid: string, user: User): Promise<Check> {
-    return await this.checkRepository
-      .createQueryBuilder('checks')
-      .where('checks.user.id = :id', { id: user.id })
-      .where('checks.uuid = :id', { id: checkUuid })
-      .innerJoinAndSelect('checks.logs', 'log')
-      .getOne();
+    return await this.checkRepository.findFullSingleCheck(user.uuid, checkUuid);
   }
 
   update(id: number, updateCheckDto: UpdateCheckDto) {
@@ -66,5 +58,35 @@ export class ChecksService {
     await this.checkRepository.delete({
       uuid: checkUuid,
     });
+  }
+
+  async getCheckReport(user: User, checkUuid: string): Promise<Ireport> {
+    const check = await this.checkRepository.findFullSingleCheck(
+      user.uuid,
+      checkUuid,
+    );
+
+    // get average reponse time
+    const avgResponseTime = await this.checkLogRepository.getAvgResTime(
+      checkUuid,
+    );
+
+    // get up & down status count
+    const logsConut = check.logs.length;
+    const upCount = await this.checkLogRepository.count({
+      where: { status: 'up', check: { uuid: checkUuid } },
+      relations: ['check'],
+    });
+    const downCount = Math.abs(logsConut - upCount);
+
+    return {
+      status: check.logs[0].status,
+      outages: downCount,
+      availability: Math.round((upCount / logsConut) * 100),
+      downtime: downCount * check.config.interval,
+      uptime: upCount * check.config.interval,
+      averageResponseTime: avgResponseTime,
+      history: check.logs,
+    };
   }
 }

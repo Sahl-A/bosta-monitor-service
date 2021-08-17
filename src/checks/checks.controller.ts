@@ -16,6 +16,7 @@ import { UpdateCheckDto } from './dto/update-check.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { IextendedRequest } from '../shared/interfaces/extendedRequest.inteface';
 import { Check } from './entities/check.entity';
+import { Ireport } from 'src/shared/interfaces/report.interface';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('checks')
@@ -33,6 +34,15 @@ export class ChecksController {
   @Get()
   async findAll(@Request() req: IextendedRequest): Promise<Check[]> {
     return await this.checksService.findAll(req.user);
+  }
+
+  @Get(':checkId/reports')
+  async getReports(
+    @Param('checkId') checkId: string,
+    @Request() req: IextendedRequest,
+  ): Promise<Ireport> {
+    const reports = await this.checksService.getCheckReport(req.user, checkId);
+    return reports;
   }
 
   @Get(':checkId')

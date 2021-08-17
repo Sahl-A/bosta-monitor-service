@@ -9,4 +9,22 @@ export class CheckRepository extends Repository<Check> {
     newCheck.user = user;
     return await this.save(newCheck);
   }
+
+  public async findFullSingleCheck(userUuid: string, checkUuid: string) {
+    return await this.createQueryBuilder('checks')
+      .where('checks.user.uuid = :uuid', { uuid: userUuid })
+      .where('checks.uuid = :uuid', { uuid: checkUuid })
+      .innerJoinAndSelect('checks.logs', 'log')
+      .innerJoinAndSelect('checks.config', 'config')
+      .getOne();
+  }
+
+  public async findAllChecks(userUuid: string): Promise<Check[]> {
+    return await this.createQueryBuilder('checks')
+      .where('user.uuid = :uuid', { uuid: userUuid })
+      .innerJoinAndSelect('checks.logs', 'log')
+      .innerJoinAndSelect('checks.user', 'user')
+      .innerJoinAndSelect('checks.config', 'config')
+      .getMany();
+  }
 }
