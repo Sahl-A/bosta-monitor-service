@@ -8,7 +8,7 @@ Content-Type: application/json
   "protocol": "http",
   "path": "test-path",
   "port": "8080",
-  "webhook": "https://discord.com/api/webhooks/876078314140344371/jPRLhfQav-slDrWEiK4wOENR2-PCRm0JVmj4ZX4ehXz7QidtAQxWwdiwD6JKRnt3pRlr",
+  "webhook": "test",
   "interval": 10,
   "authentication": {"username":"sahl","password": "123456"},
   "tags": ["pickify", "polls"]
