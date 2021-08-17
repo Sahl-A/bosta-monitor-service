@@ -45,8 +45,12 @@ export class ChecksService implements OnModuleInit {
     return newCheck.uuid;
   }
 
-  async findAll(user: User): Promise<Check[]> {
-    return await this.checkRepository.findUserChecks(user.uuid);
+  async findAll(user: User): Promise<{ checksCount: number; checks: Check[] }> {
+    const checks = await this.checkRepository.findUserChecks(user.uuid);
+    return {
+      checksCount: checks.length,
+      checks,
+    };
   }
 
   async findOne(checkUuid: string, user: User): Promise<Check> {

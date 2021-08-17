@@ -32,7 +32,9 @@ export class ChecksController {
   }
 
   @Get()
-  async findAll(@Request() req: IextendedRequest): Promise<Check[]> {
+  async findAll(
+    @Request() req: IextendedRequest,
+  ): Promise<{ checksCount: number; checks: Check[] }> {
     return await this.checksService.findAll(req.user);
   }
 
